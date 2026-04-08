@@ -1,0 +1,243 @@
+openapi: 3.0.0
+info:
+  title: Blog Platform API
+  version: 1.0.0
+  description: API for managing articles and comments
+
+servers:
+  - url: https://api.example.com
+
+tags:
+  - name: Articles
+    description: Operations with articles
+  - name: Comments
+    description: Operations with comments
+
+paths:
+  /articles:
+    get:
+      tags: [Articles]
+      summary: Get all articles
+      responses:
+        '200':
+          description: Articles retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+
+    post:
+      tags: [Articles]
+      summary: Create a new article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleInput'
+      responses:
+        '201':
+          description: Article created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '400':
+          description: Invalid request body
+
+  /articles/{id}:
+    get:
+      tags: [Articles]
+      summary: Get article by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Article found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: Article not found
+
+    put:
+      tags: [Articles]
+      summary: Update article by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleInput'
+      responses:
+        '200':
+          description: Article updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: Article not found
+
+    delete:
+      tags: [Articles]
+      summary: Delete article by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Article deleted successfully
+        '404':
+          description: Article not found
+
+  /articles/{id}/comments:
+    get:
+      tags: [Comments]
+      summary: Get comments for article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Comments retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '404':
+          description: Article not found
+
+    post:
+      tags: [Comments]
+      summary: Add comment to article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentInput'
+      responses:
+        '201':
+          description: Comment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '404':
+          description: Article not found
+
+  /comments/{id}:
+    delete:
+      tags: [Comments]
+      summary: Delete comment by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Comment deleted successfully
+        '404':
+          description: Comment not found
+
+components:
+  schemas:
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Introduction to OpenAPI
+        content:
+          type: string
+          example: OpenAPI helps describe REST APIs.
+        author:
+          type: string
+          example: Valerii Kotsur
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-04-08T10:00:00Z
+
+    ArticleInput:
+      type: object
+      required:
+        - title
+        - content
+        - author
+      properties:
+        title:
+          type: string
+          example: Introduction to OpenAPI
+        content:
+          type: string
+          example: OpenAPI helps describe REST APIs.
+        author:
+          type: string
+          example: Valerii Kotsur
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        articleId:
+          type: integer
+          example: 1
+        author:
+          type: string
+          example: Reader1
+        text:
+          type: string
+          example: Great article
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-04-08T11:00:00Z
+
+    CommentInput:
+      type: object
+      required:
+        - author
+        - text
+      properties:
+        author:
+          type: string
+          example: Reader1
+        text:
+          type: string
+          example: Great article
