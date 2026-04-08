@@ -1,0 +1,1 @@
+{"version":3,"file":"authorization-BUX1WUQJ.js","sources":["../../../pages/authorization.mdx"],"sourcesContent":["---\r\ntitle: Authorization\r\n---\r\n\r\n# Authorization\r\n\r\nAPI uses Bearer Token.\r\n\r\nAuthorization: Bearer YOUR_TOKEN"],"names":[],"mappings":"+WAIE,SAAA;aAEF,SAAA;aAEA,SAAA"}
